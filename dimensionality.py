@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from random_walks import random_walks , two_dimensional_walks
+from random_walks import random_walks , two_dimensional_walks, three_dimensional_walks
 
 #initial conditions
 
@@ -55,23 +55,205 @@ plt.show()
 #Part 2 higher dimensions
 M_hd = 1000
 
-#2D walk
+# #2D walk'
+# N = 10_000
+# M = 1_000
+
+# final_positions = []
+
+# for tiral in range(N):
+#     final_postion = two_dimensional_walks(M, rng)
+#     final_positions.append(final_postion)
+
+# final_positions = np.array(final_positions)
+
+# x_final = final_positions[:, 0]
+# y_final = final_positions[:, 1]
+
+# r_final = np.sqrt(x_final**2 + y_final**2)
+
+# #plots
+# x_final = final_positions[:, 0]
+# y_final = final_positions[:, 1]
+# plt.figure()
+
+# plt.hist2d(
+#     x_final,
+#     y_final,
+#     bins=50,
+#     cmap='viridis'
+# )
+
+# plt.xlabel('Final x position')
+# plt.ylabel('Final y position')
+# plt.title('2D Random-Walk Final Position Density')
+# plt.colorbar(label='Count')
+# plt.gca().set_aspect('equal')
+
+# plt.tight_layout()
+# plt.show()
+# # Histogram of final x values
+# plt.figure()
+
+# plt.hist(
+#     x_final,
+#     bins=50,
+#     density=True,
+#     alpha=0.7
+# )
+
+# plt.xlabel('Final x position')
+# plt.ylabel('Probability density')
+# plt.title('Distribution of Final x Values')
+# plt.grid()
+
+# plt.tight_layout()
+# plt.show()
+
+# # Histogram of final y values
+# plt.figure()
+
+# plt.hist(
+#     y_final,
+#     bins=50,
+#     density=True,
+#     alpha=0.7
+# )
+
+# plt.xlabel('Final y position')
+# plt.ylabel('Probability density')
+# plt.title('Distribution of Final y Values')
+# plt.grid()
+
+# plt.tight_layout()
+# plt.show()
+
+# # Histogram of final distance from the origin
+# plt.figure()
+
+# plt.hist(
+#     r_final,
+#     bins=50,
+#     density=True,
+#     alpha=0.7
+# )
+
+# plt.xlabel('Final distance r')
+# plt.ylabel('Probability density')
+# plt.title('Distribution of Final Distance from Origin')
+# plt.grid()
+
+# plt.tight_layout()
+# plt.show()
+
+#3D walks
+
 N = 10_000
 M = 1_000
 
-final_positions = []
+final_positions_3d = []
 
 for tiral in range(N):
-    final_postion = two_dimensional_walks(M, rng)
-    final_positions.append(final_postion)
+    final_postion_3d = three_dimensional_walks(M, rng)
+    final_positions.append(final_postion_3d)
 
-final_positions = np.array(final_positions)
+final_positions_3d = np.array(final_positions_3d)
 
 #plots
-y = 0.7 * final_positions + np.random.normal(size = 5000)
+x_3d_final = final_positions_3d[:, 0]
+y_3d_final = final_positions_3d[:, 1]
+z_3d_final = final_positions_3d[:, 2]
 
-plt.hist2d(final_positions, y, bins = 40)
-plt.xlabel('x')
-plt.ylabel('y')
+
+r_3d_final = np.sqrt(x_3d_final**2 + y_3d_final**2 + z_3d_final**2)
+
+plt.figure()
+
+plt.hist2d(
+    x_3d_final,
+    y_3d_final,
+    bins=50,
+    cmap='viridis'
+)
+
+plt.xlabel('Final x position')
+plt.ylabel('Final y position')
+plt.title('3D Random Walk: Final x-y Projection')
 plt.colorbar(label='Count')
+plt.gca().set_aspect('equal')
+
+plt.tight_layout()
 plt.show()
+# Histogram of final x values
+plt.figure()
+
+plt.hist(
+    x_3d_final,
+    bins=50,
+    density=True,
+    alpha=0.7
+)
+
+plt.xlabel('Final x position')
+plt.ylabel('Probability density')
+plt.title('Distribution of Final x Values')
+plt.grid()
+
+plt.tight_layout()
+plt.show()
+
+# Histogram of final y values
+plt.figure()
+
+plt.hist(
+    y_3d_final,
+    bins=50,
+    density=True,
+    alpha=0.7
+)
+
+plt.xlabel('Final y position')
+plt.ylabel('Probability density')
+plt.title('Distribution of Final y Values')
+plt.grid()
+
+plt.tight_layout()
+plt.show()
+
+#z histogram
+plt.figure()
+plt.hist(
+    z_3d_final,
+    bins=50,
+    density=True,
+    alpha=0.7
+)
+
+plt.xlabel('Final z position')
+plt.ylabel('Probability density')
+plt.title('Distribution of Final y Values')
+plt.grid()
+
+plt.tight_layout()
+plt.show()
+
+# Histogram of final distance from the origin
+plt.figure()
+
+plt.hist(
+    r_3d_final,
+    bins=50,
+    density=True,
+    alpha=0.7
+)
+
+plt.xlabel('Final distance r')
+plt.ylabel('Probability density')
+plt.title('Distribution of Final Distance from Origin')
+plt.grid()
+
+plt.tight_layout()
+plt.show()
+
+
+
