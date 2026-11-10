@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from random_walks import random_walks , two_dimensional_walks, three_dimensional_walks, boundary
+from random_walks import  boundary, absorbing_survivors
 
 M = 1000
 N = 10_000
@@ -85,3 +85,53 @@ plt.legend()
 
 plt.tight_layout()
 plt.show()
+
+
+#B1
+x_5_survivors = absorbing_survivors(5, N, M, rng)
+x_20_survivors = absorbing_survivors(20, N, M, rng)
+x_50_survivors = absorbing_survivors(50, N, M, rng)
+
+#plot für B1
+
+#new unbiased
+unbiased_steps_B1 = rng.choice([-1, 1], size=(N, M))
+x_unbiased_B1 = np.sum(unbiased_steps_B1, axis=1)
+
+
+
+all_positions_B1 = np.concatenate((
+    x_unbiased_B1,
+    x_5_survivors,
+    x_20_survivors,
+    x_50_survivors
+))
+
+bins_B1 = np.arange(
+    np.min(all_positions_B1) - 0.5,
+    np.max(all_positions_B1) + 1.5,
+    1
+)
+
+
+plt.figure()
+
+plt.hist(x_unbiased_B1, bins=bins_B1, density=True,
+         histtype='step', label='Unbiased')
+
+plt.hist(x_5_survivors, bins=bins_B1, density=True,
+         histtype='step', label='Absorbing boundary: x = 5')
+
+plt.hist(x_20_survivors, bins=bins_B1, density=True,
+         histtype='step', label='Absorbing boundary: x = 20')
+
+plt.hist(x_50_survivors, bins=bins_B1, density=True,
+         histtype='step', label='Absorbing boundary: x = 50')
+
+plt.xlabel('Final position x')
+plt.ylabel('Probability density')
+plt.title('Case B1: Absorbing Boundaries, Survivors Only')
+plt.grid()
+plt.legend()
+plt.show()
+

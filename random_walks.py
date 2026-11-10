@@ -70,3 +70,35 @@ def boundary(boundary, N, M, rng):
 
 
     return positions
+
+
+def absorbing_survivors(boundary, N, M, rng):
+
+    final_positions = []
+
+    # keep starting new trials until N walkers survived
+    while len(final_positions) < N:
+
+        #  simulate as many new walkers as are still needed
+        number_new_walkers = N - len(final_positions)
+
+        positions = np.zeros(number_new_walkers, dtype=int)
+        alive = np.ones(number_new_walkers, dtype=bool)
+
+        for step_number in range(M):
+
+            steps = rng.choice([-1, 1], size=number_new_walkers)
+
+            # A walker at b attempts to move to b + 1
+            attempted_crossing = (alive & (positions == boundary)& (steps == 1))
+
+            #remove walker
+            alive[attempted_crossing] = False
+
+            #only surviving walkers
+            positions[alive] += steps[alive]
+
+        
+        final_positions.extend(positions[alive])
+
+    return np.array(final_positions[:N])
