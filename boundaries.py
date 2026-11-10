@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from random_walks import  boundary, absorbing_survivors
+from random_walks import  boundary, absorbing_survivors,absorbing_stopped, cliff_no_return, tunneling_wall
 
 M = 1000
 N = 10_000
@@ -135,3 +135,130 @@ plt.grid()
 plt.legend()
 plt.show()
 
+#B2# 
+#boundary at 20
+x_20_stopped, absorbed_fraction = absorbing_stopped(20, N, M, rng)
+
+#
+
+# same integer-centered bins for B1 and B2
+all_positions_B2 = np.concatenate((
+    x_20_survivors,
+    x_20_stopped
+))
+
+bins_B2 = np.arange(
+    np.min(all_positions_B2) - 0.5,
+    np.max(all_positions_B2) + 1.5,
+    1
+)
+
+plt.figure()
+
+plt.hist(
+    x_20_survivors,
+    bins=bins_B2,
+    density=True,
+    histtype='step',
+    label='B1: survivors only'
+)
+
+plt.hist(
+    x_20_stopped,
+    bins=bins_B2,
+    density=True,
+    histtype='step',
+    label='B2: stopped walkers included'
+)
+
+plt.xlabel('Recorded final position x')
+plt.ylabel('Probability density')
+plt.title('Absorbing Boundary at x = 20: B1 vs. B2')
+plt.grid()
+plt.legend()
+plt.show()
+
+#C
+# Case C: cliff with no return
+x_5_cliff = cliff_no_return(5, N, M, rng)
+x_20_cliff = cliff_no_return(20, N, M, rng)
+x_50_cliff = cliff_no_return(50, N, M, rng)
+
+#separate unbiased for case C
+unbiased_steps_C = rng.choice([-1, 1], size=(N, M))
+x_unbiased_C = np.sum(unbiased_steps_C, axis=1)
+
+all_positions_C = np.concatenate((
+    x_unbiased_C,
+    x_5_cliff,
+    x_20_cliff,
+    x_50_cliff
+))
+
+bins_C = np.arange(
+    np.min(all_positions_C) - 0.5,
+    np.max(all_positions_C) + 1.5,
+    1
+)
+
+#plot
+plt.figure()
+
+plt.hist(x_unbiased_C, bins=bins_C, density=True,
+         histtype='step', label='Unbiased')
+
+plt.hist(x_5_cliff, bins=bins_C, density=True,
+         histtype='step', label='Cliff at x = 5')
+
+plt.hist(x_20_cliff, bins=bins_C, density=True,
+         histtype='step', label='Cliff at x = 20')
+
+plt.hist(x_50_cliff, bins=bins_C, density=True,
+         histtype='step', label='Cliff at x = 50')
+
+plt.xlabel('Final position x')
+plt.ylabel('Probability density')
+plt.title('Case C: Cliff with No Return')
+plt.grid()
+plt.legend()
+plt.show()
+
+#C
+p_values = [0.0, 0.1, 0.5, 1.0]
+
+tunneling_positions = []
+
+#schleife aufrufe
+for p in p_values:
+
+    final_positions = tunneling_wall(boundary=5,N=N,M=M,p=p,rng=rng)
+    tunneling_positions.append(final_positions)
+
+    all_positions_D = np.concatenate(tunneling_positions)
+
+
+bins_D = np.arange(
+    np.min(all_positions_D) - 0.5,
+    np.max(all_positions_D) + 1.5,
+    1
+)
+
+
+#plot
+plt.figure()
+for p, final_positions in zip(p_values, tunneling_positions):
+
+    plt.hist(
+        final_positions,
+        bins=bins_D,
+        density=True,
+        histtype='step',
+        label=f'p = {p}'
+    )
+
+plt.xlabel('Final position x')
+plt.ylabel('Probability density')
+plt.title('Case D: Tunneling Through a Wall at x = 5')
+plt.grid()
+plt.legend()
+plt.show()

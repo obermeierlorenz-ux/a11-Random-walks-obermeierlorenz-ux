@@ -102,3 +102,76 @@ def absorbing_survivors(boundary, N, M, rng):
         final_positions.extend(positions[alive])
 
     return np.array(final_positions[:N])
+
+
+
+
+def absorbing_stopped(boundary, N, M, rng):
+
+    positions = np.zeros(N, dtype=int)
+    active = np.ones(N, dtype=bool)
+    absorbed = np.zeros(N, dtype=bool)
+
+    for step_number in range(M):
+
+        steps = rng.choice([-1, 1], size=N)
+
+        # active walker tries to move from b to b + 1
+        attempted_crossing = (active& (positions == boundary)& (steps == 1))
+
+        # Stop these walkers at the boundary
+        absorbed[attempted_crossing] = True
+        active[attempted_crossing] = False
+
+        # Only walkers that are still active move
+        positions[active] += steps[active]
+    absorbed_fraction = np.mean(absorbed)
+
+
+    return positions, absorbed_fraction
+
+def cliff_no_return(boundary, N, M, rng):
+
+    positions = np.zeros(N, dtype=int)
+
+    for step_number in range(M):
+
+        steps = rng.choice([-1,1], size=N)
+
+        attempted_return = ((positions == boundary + 1)&(steps == -1))
+
+        # reflect the return step  b+1 -> b becomes b+1 -> b + 2
+        steps[attempted_return] = 1
+        positions += steps
+
+    return positions
+
+
+def tunneling_wall(boundary, N, M, p, rng):
+
+    positions = np.zeros(N, dtype=int)
+
+    for step_number in range(M):
+
+        steps = rng.choice([-1, 1], size=N)
+
+        # crossing from left to right
+        cross_left_to_right = ((positions == boundary)& (steps == 1))
+
+        # right to left
+        cross_right_to_left = ((positions == boundary + 1)& (steps == -1))
+
+        #connects the two bool arrays
+        attempted_crossing = cross_left_to_right | cross_right_to_left
+
+        #give every attempted crossing a transmission decision
+        crossing_indices = np.where(attempted_crossing)[0]
+        random_values = rng.random(len(crossing_indices))
+
+        #reflection of the  walkers that dont transmit
+        reflected_indices = crossing_indices[random_values >= p]
+        steps[reflected_indices] *= -1
+
+        positions += steps
+
+    return positions
