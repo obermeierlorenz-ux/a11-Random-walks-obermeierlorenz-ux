@@ -11,7 +11,7 @@ def random_walks(N, M_values, rng):
     for M in M_values:
 
     #create a array with M[i] zeros
-        steps = rng.choice([-1, 1], size=(M, N))
+        steps = rng.choice([-1, 1], size=(N, M))
 
         final_postion = np.sum(steps, axis=1)
 
