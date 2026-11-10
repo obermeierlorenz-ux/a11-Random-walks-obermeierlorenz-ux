@@ -52,3 +52,21 @@ def three_dimensional_walks(M, rng):
 
 
     return postion
+
+def boundary(boundary, N, M, rng):
+
+
+    positions = np.zeros(N, dtype=int)
+
+    for step_number in range(M):
+
+    #create a array with M[i] zeros
+        steps = rng.choice([-1, 1], size=N)
+
+        attempted_crossing = (positions == boundary) & (steps ==1)
+
+        positions+= steps
+        positions[attempted_crossing] -=2
+
+
+    return positions
