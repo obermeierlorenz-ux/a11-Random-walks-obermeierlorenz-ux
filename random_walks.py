@@ -1,9 +1,25 @@
 import numpy as np
 
 
+#validation check
+def validate_positive_integer(value, name):
 
+    if not isinstance(value, (int, np.integer)) or value <= 0:
+        raise ValueError(f'{name} must be a positive integer.')
+
+
+def validate_probability(p):
+
+    if not 0 <= p <= 1:
+        raise ValueError('p must satisfy 0 <= p <= 1.')
+
+    
 def random_walks(N, M_values, rng):
 
+    validate_positive_integer(N, 'N')
+
+    for M in M_values:
+        validate_positive_integer(M, 'M')
     #empty lists to store the arrays of each simulation
     simulations = []
 
@@ -22,7 +38,9 @@ def random_walks(N, M_values, rng):
 
 def two_dimensional_walks(M, rng):
 
-        #empty lists to store the arrays of each simulation
+    validate_positive_integer(M, 'M')
+
+    #empty lists to store the arrays of each simulation
     postion = np.array([0.0, 0.0])
 
     for i in range(M):
@@ -39,7 +57,10 @@ def two_dimensional_walks(M, rng):
 
 def three_dimensional_walks(M, rng):
 
-        #empty lists to store the arrays of each simulation
+    validate_positive_integer(M, 'M')
+
+
+    #empty lists to store the arrays of each simulation
     postion = np.array([0.0, 0.0, 0.0])
 
     for i in range(M):
@@ -55,6 +76,8 @@ def three_dimensional_walks(M, rng):
 
 def boundary(boundary, N, M, rng):
 
+    validate_positive_integer(N, 'N')
+    validate_positive_integer(M, 'M')
 
     positions = np.zeros(N, dtype=int)
 
@@ -73,6 +96,10 @@ def boundary(boundary, N, M, rng):
 
 
 def absorbing_survivors(boundary, N, M, rng):
+
+
+    validate_positive_integer(N, 'N')
+    validate_positive_integer(M, 'M')
 
     final_positions = []
 
@@ -108,6 +135,10 @@ def absorbing_survivors(boundary, N, M, rng):
 
 def absorbing_stopped(boundary, N, M, rng):
 
+
+    validate_positive_integer(N, 'N')
+    validate_positive_integer(M, 'M')
+
     positions = np.zeros(N, dtype=int)
     active = np.ones(N, dtype=bool)
     absorbed = np.zeros(N, dtype=bool)
@@ -132,6 +163,10 @@ def absorbing_stopped(boundary, N, M, rng):
 
 def cliff_no_return(boundary, N, M, rng):
 
+
+    validate_positive_integer(N, 'N')
+    validate_positive_integer(M, 'M')
+
     positions = np.zeros(N, dtype=int)
 
     for step_number in range(M):
@@ -148,6 +183,11 @@ def cliff_no_return(boundary, N, M, rng):
 
 
 def tunneling_wall(boundary, N, M, p, rng):
+
+
+    validate_positive_integer(N, 'N')
+    validate_positive_integer(M, 'M')
+    validate_probability(p)
 
     positions = np.zeros(N, dtype=int)
 
